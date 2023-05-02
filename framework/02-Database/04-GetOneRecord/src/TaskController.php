@@ -38,7 +38,7 @@ class TaskController
                $task = $this->gateway->get($id);
 
                if ($task === false) {
-                   $this->respondMethodNotAllowed($id);
+                   $this->respondNotFound($id);
                    return;
                }
 
