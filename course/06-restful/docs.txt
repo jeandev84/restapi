@@ -1,0 +1,16 @@
+1.
+https://en.wikipedia.org/wiki/Representational_state_tranfer
+https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm
+
+
+REST:
+
+GET            /products
+GET            /products/123
+POST           /products
+PUT|PATCH     /products/123
+DELETE        /products/123
+
+
+2.
+

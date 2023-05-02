@@ -1,0 +1,14 @@
+$ http post https://localhost/api/tasks name="A new task" priority=3 --form
+[
+ "name" => "A new task",
+ "priority" => 3
+]
+
+
+
+# WRAPPERS
+https://www.php.net/manual/en/wrappers.php.php#wrappers.php.input
+
+
+# HTTPIE
+https://httpie.io/docs#request-items

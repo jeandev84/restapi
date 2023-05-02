@@ -1,0 +1,91 @@
+$ sudo mysql -uroot -p
+[sudo] password for yao:
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.32-0ubuntu0.22.04.2 (Ubuntu)
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SHOW DATABASES;
++------------------------+
+| Database               |
++------------------------+
+| apiplatform            |
+| doctrineorm            |
+| ecommerce_mini_project |
+| eshoprmq               |
+| information_schema     |
+| lexus                  |
+| mysql                  |
+| performance_schema     |
+| products_api           |
+| products_api_test      |
+| shop                   |
+| specialist_eshop_goods |
+| specialist_guestbook   |
+| specialist_oop_eshop   |
+| specialist_web         |
+| symfony                |
+| sys                    |
+| videos                 |
++------------------------+
+18 rows in set (0,11 sec)
+
+mysql> CREATE DATABASE api_db;
+Query OK, 1 row affected (0,06 sec)
+
+mysql> GRANT ALL PRIVILEGES ON api_db.* TO api_db_user@localhost IDENTIFIED BY 'k5cWTeqs6GXK2hzF';
+mysql> exit;
+
+
+// RECONNECT TO THE DATABASE WITH CREDENTIALS USER CREATED
+$ sudo mysql -uapi_db_user -p
+$ mysql> use api_db;
+Database changed
+mysql>
+
+// CREATE TABLE
+$ sudo mysql -uapi_db_user -p
+$ mysql> use api_db;
+Database changed
+$ mysql> CREATE TABLE task (
+    -> id INT NOT NULL AUTO_INCREMENT,
+    -> name VARCHAR(128) NOT NULL,
+    -> priority INT DEFAULT NULL,
+    -> is_completed BOOLEAN NOT NULL DEFAULT FALSE,
+    -> PRIMARY KEY(id),
+    -> INDEX(name)
+    -> );
+Query OK, 0 rows affected (0,03 sec)
+
+$ mysql> DESCRIBE task;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| id           | int          | NO   | PRI | NULL    | auto_increment |
+| name         | varchar(128) | NO   | MUL | NULL    |                |
+| priority     | int          | YES  |     | NULL    |                |
+| is_completed | tinyint(1)   | NO   |     | 0       |                |
++--------------+--------------+------+-----+---------+----------------+
+4 rows in set (0,02 sec)
+
+$ mysql> SHOW INDEXES;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> SHOW INDEXES FROM task;
++-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| task  |          0 | PRIMARY  |            1 | id          | A         |           0 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+| task  |          1 | name     |            1 | name        | A         |           0 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
++-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+2 rows in set (0,01 sec)
+
+$ mysql>
+

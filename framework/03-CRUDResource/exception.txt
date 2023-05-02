@@ -1,0 +1,3 @@
+https://www.php.net/manual/en/function.set-exception-handler.php
+https://www.php.net/manual/en/function.set-error-handler.php
+https://www.php.net/manual/en/class.errorexception.php
