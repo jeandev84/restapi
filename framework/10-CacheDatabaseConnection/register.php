@@ -1,7 +1,5 @@
 <?php
 
-# CLIENT
-# http://localhost:8000/register.php
 require __DIR__.'/vendor/autoload.php';
 
 /**
