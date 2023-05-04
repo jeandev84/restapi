@@ -52,11 +52,19 @@ if ($resource != "tasks") {
  * X-API: abcdef123445
  *
  * X-API-Key:abc123 (will be in $_SERVER where $_SERVER["HTTP_X_API_KEY"])
+ *
+ * Bad Request: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
 */
 
 // $api_key = $_GET['api-key'];
 // echo $api_key;
 // print_r($_SERVER);
+
+if (empty($_SERVER["HTTP_X_API_KEY"])) {
+    http_response_code(400);
+    echo json_encode(["message" => "missing API key"]);
+    exit;
+}
 
 $api_key = $_SERVER["HTTP_X_API_KEY"];
 echo $api_key;
