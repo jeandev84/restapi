@@ -42,7 +42,19 @@ $database = new Database($_ENV["DB_HOST"], $_ENV["DB_NAME"], $_ENV["DB_USER"], $
 
 $userGateway = new UserGateway($database);
 
+/**
+ * By Default Apache disabled HTTP_AUTHORIZATION that is reason is not exist in $_SERVER
+ * use apache_request_headers() see more here:
+ *
+ * https://www.php.net/manual/en/function.apache-request-headers.php
+*/
+dd($_SERVER["HTTP_AUTHORIZATION"] ?? null);
 
+/*
+$headers = apache_request_headers();
+echo $headers["Authorization"];
+exit;
+*/
 
 // Authentication process
 $auth = new Auth($userGateway);
