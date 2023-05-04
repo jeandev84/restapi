@@ -1,6 +1,14 @@
 <?php
 declare(strict_types=1);
 
+
+/**
+ * GET : http://localhost:8000/api/tasks
+ * GET : http://localhost:8000/api/tasks/{id}
+ * POST : http://localhost:8000/api/tasks
+ * PATCH : http://localhost:8000/api/tasks/{id}
+ * DELETE : http://localhost:8000/api/tasks/{id}
+*/
 // ini_set("display_errors", "On");
 
 require dirname(__DIR__). "/vendor/autoload.php";

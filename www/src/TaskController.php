@@ -58,10 +58,20 @@ class TaskController
                        echo json_encode($task);
                    break;
                    case "PATCH":
-                       echo "update $id";
+                       $data = (array) json_decode(file_get_contents("php://input"), true);
+                       $errors = $this->getValidationErrors($data, false);
+
+                       if (! empty($errors)) {
+                           $this->respondUnprocessabbleEntity($errors);
+                           return;
+                       }
+
+                       $rows = $this->gateway->update($id, $data);
+                       echo json_encode(["message" => "Task updated", "rows" => $rows]);
                    break;
                    case "DELETE":
-                       echo "delete $id";
+                       $rows = $this->gateway->delete($id);
+                       echo json_encode(["message" => "Task deleted", "rows" => $rows]);
                    break;
                    default:
                        $this->respondMethodNotAllowed("GET, PATCH, DELETE");
@@ -126,13 +136,16 @@ class TaskController
       }
 
 
-
-
-      private function getValidationErrors(array $data): array
+     /**
+      * @param array $data
+      * @param bool $isNew
+      * @return array
+     */
+      private function getValidationErrors(array $data, bool $isNew = true): array
       {
            $errors = [];
 
-           if (empty($data["name"])) {
+           if ($isNew && empty($data["name"])) {
                $errors[] = "name is required";
            }
 

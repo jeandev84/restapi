@@ -81,4 +81,87 @@ class TaskGateway
 
           return $this->connection->lastInsertId();
      }
+
+
+
+     /**
+      * @param string $id
+      * @param array $data
+      * @return int
+     */
+     public function update(string $id, array $data): int
+     {
+          $fields = [];
+
+          if (! empty($data["name"])) {
+              $fields["name"] = [
+                 $data["name"],
+                 PDO::PARAM_STR
+              ];
+          }
+
+
+         if (array_key_exists("priority", $data)) {
+             $fields["priority"] = [
+                 $data["priority"],
+                 $data["priority"]  === null ? PDO::PARAM_NULL : PDO::PARAM_INT
+             ];
+         }
+
+
+         if (array_key_exists("is_completed", $data)) {
+             $fields["is_completed"] = [
+                 $data["is_completed"],
+                 PDO::PARAM_BOOL
+             ];
+         }
+
+
+         if (empty($fields)) {
+             return 0;
+         } else {
+             /*
+               0 => "name = :name"
+               1 => "priority = :priority"
+               2 => "is_completed = :is_completed"
+        */
+             $sets = array_map(function ($value) {
+                 return "$value = :$value";
+             }, array_keys($fields));
+
+
+             # "UPDATE task SET name = :name, priority = :priority, is_completed = :is_completed WHERE id = :id"
+             $sql = "UPDATE task SET ". implode(", ", $sets) . " WHERE id = :id";
+
+             $stmt = $this->connection->prepare($sql);
+             $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
+             foreach ($fields as $name => $values) {
+                 $stmt->bindValue(":$name", $values[0], $values[1]);
+             }
+
+             $stmt->execute();
+
+             // Return number of rows updated
+             return $stmt->rowCount();
+         }
+     }
+
+
+     /**
+      * @param string $id
+      * @return int
+     */
+     public function delete(string $id): int
+     {
+          $sql = "DELETE FROM task WHERE id = :id";
+
+          $stmt = $this->connection->prepare($sql);
+          $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+          $stmt->execute();
+
+          // Return numbers of rows deleted
+          return $stmt->rowCount();
+     }
+
 }
