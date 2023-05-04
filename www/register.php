@@ -2,7 +2,13 @@
 
 require __DIR__.'/vendor/autoload.php';
 
-
+/**
+ * Random USER_API_KEY
+ *
+ * https://www.php.net/manual/en/function.random-bytes.php
+ * https://www.php.net/manual/en/function.bin2hex.php
+ *
+*/
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
      $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
@@ -18,11 +24,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
      $stmt = $conn->prepare($sql);
 
      $password_hash = password_hash($_POST["password"], PASSWORD_DEFAULT);
+     $api_key       = bin2hex(random_bytes(16));
+
 
      $stmt->bindValue(":name", $_POST["name"], PDO::PARAM_STR);
      $stmt->bindValue(":username", $_POST["username"], PDO::PARAM_STR);
      $stmt->bindValue(":password_hash", $password_hash, PDO::PARAM_STR);
-     $stmt->bindValue(":api_key", $_POST["api_key"], PDO::PARAM_STR);
+     $stmt->bindValue(":api_key", $api_key, PDO::PARAM_STR);
+
+     $stmt->execute();
+
+     echo "Thank you for registering. Your API key is $api_key";
+     exit;
 }
 ?>
 <!DOCTYPE html>
@@ -43,21 +56,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           <div>
               <label for="name">
                   Name
-                  <input name="name" id="name">
+                  <input name="name" id="name" type="text">
               </label>
           </div>
 
           <div>
               <label for="username">
                   Username
-                  <input name="username" id="username">
+                  <input name="username" id="username" type="text">
               </label>
           </div>
 
           <div>
               <label for="password">
                   Password
-                  <input name="password" id="password">
+                  <input name="password" id="password" type="password">
               </label>
           </div>
 

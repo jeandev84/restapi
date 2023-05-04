@@ -43,7 +43,26 @@ if ($resource != "tasks") {
 }
 
 
-// SEND HEADERS
+/**
+ * GET ALL HEADERS HTTP REQUEST
+ * https://www.php.net/manual/en/function.getallheaders.php
+ *
+ * https://en.wikipedia.org/wiki/Application_programming_interface_key
+ * GET /something HTTP/1.1
+ * X-API: abcdef123445
+ *
+ * X-API-Key:abc123 (will be in $_SERVER where $_SERVER["HTTP_X_API_KEY"])
+*/
+
+// $api_key = $_GET['api-key'];
+// echo $api_key;
+// print_r($_SERVER);
+
+$api_key = $_SERVER["HTTP_X_API_KEY"];
+echo $api_key;
+exit;
+
+// send headers to server for JSON Format encoding
 header("Content-type: application/json; charset=UTF-8");
 
 
