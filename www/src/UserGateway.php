@@ -20,7 +20,7 @@ class UserGateway
     */
     public function getByAPIKey(string $key): array|false
     {
-         $sql = "SELECT * user WHERE api_key = :api_key";
+         $sql = "SELECT * FROM user WHERE api_key = :api_key";
 
          $stmt = $this->connection->prepare($sql);
 

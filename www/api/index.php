@@ -73,7 +73,15 @@ $database = new Database($_ENV["DB_HOST"], $_ENV["DB_NAME"], $_ENV["DB_USER"], $
 
 $userGateway = new UserGateway($database);
 
-exit;
+
+if($userGateway->getByAPIKey($api_key) === false) {
+    /*** https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401 */
+    # Unauthorized
+    http_response_code(401);
+    echo json_encode(["message" => "Invalid API key"]);
+    exit;
+}
+
 
 // send headers to server for JSON Format encoding
 header("Content-type: application/json; charset=UTF-8");
