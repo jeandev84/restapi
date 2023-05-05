@@ -62,12 +62,4 @@ if ($user === false) {
     exit;
 }
 
-/* dd($user); */
-
-require __DIR__."/tokens.php";
-
-
-$refreshTokenGateway = new RefreshTokenGateway($database, $_ENV["JWT_SECRET_KEY"]);
-
-$refreshTokenGateway->delete($data["token"]);
-$refreshTokenGateway->create($refreshToken, $refresh_token_expiry);
+dd($user);

@@ -83,13 +83,3 @@ $jwt = new JWTCodec($_ENV["JWT_SECRET_KEY"]);
 
 
 require __DIR__."/tokens.php";
-
-
-$refreshTokenGateway = new RefreshTokenGateway($database, $_ENV["JWT_SECRET_KEY"]);
-
-/*
-From file __DIR__.'/tokens.php';
-$refreshToken
-$refresh_token_expiry
-*/
-$refreshTokenGateway->create($refreshToken, $refresh_token_expiry);

@@ -79,17 +79,44 @@ php >
 
 
 
+# exp: TTL (Expire Claims)
+# exp: time() + 3600 (1h)
+# exp: time() + 300 (30s)
+# exp: time() + 20  (2s)
+$payload = [
+  "sub" => $user["id"],
+  "name" => $user["name"],
+  "exp"  => time() + 20 # 2 seconds (recommended)
+];
+
+
+# $accessToken = base64_encode(json_encode($payload));
+
+
 $jwt = new JWTCodec($_ENV["JWT_SECRET_KEY"]);
+$accessToken  = $jwt->encode($payload);
+$refreshToken = $jwt->encode([
+    "sub" => $user["id"],
+    "exp" => time() + 432000, # 2 days (for example)
+]);
 
 
-require __DIR__."/tokens.php";
-
-
-$refreshTokenGateway = new RefreshTokenGateway($database, $_ENV["JWT_SECRET_KEY"]);
+echo json_encode([
+    "access_token"  => $accessToken,
+    "refresh_token" => $refreshToken
+]);
 
 /*
-From file __DIR__.'/tokens.php';
-$refreshToken
-$refresh_token_expiry
+{
+    "access_token": "eyJpZCI6MywibmFtZSI6IkRlbW8ifQ=="
+}
+
+php -a
+Interactive shell
+
+php > echo base64_decode("eyJpZCI6MywibmFtZSI6IkRlbW8ifQ==");
+{"id":3,"name":"Demo"}
+php >
 */
-$refreshTokenGateway->create($refreshToken, $refresh_token_expiry);
+
+
