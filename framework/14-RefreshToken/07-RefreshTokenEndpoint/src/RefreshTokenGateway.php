@@ -58,7 +58,7 @@ class RefreshTokenGateway
 
           $stmt = $this->connection->prepare($sql);
 
-          $stmt->bindValue(":token_hash", $hash, PDO::PARAM_INT);
+          $stmt->bindValue(":token_hash", $hash, PDO::PARAM_STR);
 
           $stmt->execute();
 
