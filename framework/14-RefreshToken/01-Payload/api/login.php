@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 # CLIENT
 # http://localhost:8000/api/login.php
-require __DIR__.'/bootstrap.php';
+require __DIR__ . '/bootstrap.php';
 
 $jsonCredentials = '{
     "username": "demo",
