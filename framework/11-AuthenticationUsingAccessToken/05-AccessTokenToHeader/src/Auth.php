@@ -86,7 +86,7 @@ class Auth
 
           if ($data === null) {
              http_response_code(400);
-             echo json_encode(["message" => "invalid json"]);
+             echo json_encode(["message" => "invalid JSON"]);
              return false;
           }
 
