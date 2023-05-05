@@ -20,6 +20,9 @@
  *
  * https://keygen.io
  *
+ *
+ * Compare hash see more https://www.php.net/manual/en/function.hash-equals
+ * hash_equals()
 */
 class JWTCodec
 {
@@ -54,6 +57,31 @@ class JWTCodec
      }
 
 
+
+     /**
+      * @param string $token
+      * @return array
+     */
+     public function decode(string $token)
+     {
+         if(preg_match("/^(?<header>.+)\.(?<payload>.+)\.(?<signature>.+)$/", $token, $matches) !== 1) {
+              throw new InvalidArgumentException("invalid token format");
+         }
+
+         $signature = hash_hmac("sha256", $matches["header"]. ".". $matches["payload"] . ".". self::HASH, true);
+
+         $signature_from_token = $this->base64urlDecode($matches["signature"]);
+
+         if (! hash_equals($signature, $signature_from_token)) {
+              throw new Exception("signature doesn't match");
+         }
+
+         # Return the payload
+         return json_decode($this->base64urlDecode($matches["payload"]), true);
+     }
+
+
+
      /**
       * @param string $text
       * @return string
@@ -62,10 +90,22 @@ class JWTCodec
      {
           return str_replace(["+", "/", "="], ["-", "_", ""], base64_encode($text));
      }
+
+
+     /**
+      * @param string $text
+      * @return string
+     */
+     private function base64urlDecode(string $text): string
+     {
+          return base64_decode(str_replace(["-", '_'], ["+", "/"], $text));
+     }
 }
 
 
 /*
+TEST JWT ENCODE
+==============================================================
 $ php -a
 Interactive shell
 
@@ -75,4 +115,42 @@ php > $codec = new JWTCodec;
 php > echo $codec->encode($payload);
 eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTIzfQ.ZWY0NjZjYmE5YTQyZjU1ZDBkMjY0NTI4MGY3MDc5NmIxMmY0YzY3NDI5ZGUyNjgwZmQxMGNmYTBjNDZhZGU3Ng
 php >
+
+========================================================
+TESTING JWT DECODE
+========================================================
+
+$ php -a
+Interactive shell
+
+php > require "src/JWTCodec.php";
+php > $codec = new JWTCodec;
+php > $token = $codec->encode(["id" => 123]);
+php > echo $token;
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTIzfQ.ZWY0NjZjYmE5YTQyZjU1ZDBkMjY0NTI4MGY3MDc5NmIxMmY0YzY3NDI5ZGUyNjgwZmQxMGNmYTBjNDZhZGU3Ng
+php >
+php >
+php > $payload = $codec->decode($token);
+php > print_r($payload);
+Array
+(
+    [id] => 123
+)
+php > $payload = $codec->decode($token. "xxx");
+PHP Warning:  Uncaught Exception: signature doesn't match in /home/yao/Desktop/PHPSkills/Udemy/api/www/src/JWTCodec.php:76
+Stack trace:
+#0 php shell code(1): JWTCodec->decode()
+#1 {main}
+  thrown in /home/yao/Desktop/PHPSkills/Udemy/api/www/src/JWTCodec.php on line 76
+php >
+php >
+php >
+php > $payload = $codec->decode("xxxx");
+PHP Warning:  Uncaught InvalidArgumentException: invalid token format in /home/yao/Desktop/PHPSkills/Udemy/api/www/src/JWTCodec.php:68
+Stack trace:
+#0 php shell code(1): JWTCodec->decode()
+#1 {main}
+  thrown in /home/yao/Desktop/PHPSkills/Udemy/api/www/src/JWTCodec.php on line 68
+php >
+
 */
