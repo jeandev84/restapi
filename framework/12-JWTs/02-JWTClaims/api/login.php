@@ -78,15 +78,15 @@ php >
 */
 
 
-
 $payload = [
   "sub" => $user["id"],
   "name" => $user["name"]
 ];
 
 
-# $accessToken = base64_encode(json_encode($payload));
-
+/*
+$accessToken = base64_encode(json_encode($payload));
+*/
 
 $codec = new JWTCodec();
 $accessToken = $codec->encode($payload);
