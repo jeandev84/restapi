@@ -80,13 +80,12 @@ php >
 
 
 # exp: TTL (Expire Claims)
-# exp: time() + 3600 (1h)
 # exp: time() + 300 (30s)
 # exp: time() + 20  (2s)
 $payload = [
   "sub" => $user["id"],
   "name" => $user["name"],
-  "exp"  => time() + 20
+  "exp"  => time() + 3600
 ];
 
 

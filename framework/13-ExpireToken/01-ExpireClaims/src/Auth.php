@@ -80,16 +80,10 @@ class Auth
 
               $data = $this->jwtCodec->decode($matches[1]);
 
-          } catch (InvalidSignatureException) {
+          } catch (InvalidSignatureException $e) {
 
               http_response_code(401);
               echo json_encode(["message" => "invalid signature"]);
-              return false;
-
-          } catch (TokenExpiredException) {
-
-              http_response_code(401);
-              echo json_encode(["message" => "token has expired"]);
               return false;
 
           } catch (Exception $e) {
