@@ -1,0 +1,15 @@
+{
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^7.5",
+        "ext-curl": "*",
+        "stripe/stripe-php": "^10.12",
+        "ext-pdo": "*",
+        "vlucas/phpdotenv": "^5.5",
+        "symfony/var-dumper": "^6.2"
+    }
+}
