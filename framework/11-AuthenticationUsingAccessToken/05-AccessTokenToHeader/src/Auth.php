@@ -93,6 +93,9 @@ class Auth
 
           /* dd($matches[1], $plainText, $data); */
 
+
+          $this->userId = $data["id"];
+
           return true;
      }
 }
